@@ -3,9 +3,19 @@
   <persistence-unit name="TrabalhoEtapa2-WebPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>jdbc/trabetapa2</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>br.edu.ifsul.modelo.Cidade</class>
+    <class>br.edu.ifsul.modelo.Cliente</class>
+    <class>br.edu.ifsul.modelo.ClienteComum</class>
+    <class>br.edu.ifsul.modelo.ClienteEmpresa</class>
+    <class>br.edu.ifsul.modelo.ProdutoServico</class>
+    <class>br.edu.ifsul.modelo.OrdemServico</class>
+    <class>br.edu.ifsul.modelo.ItemOrdemServico</class>
+    <class>br.edu.ifsul.modelo.Referencia</class> 
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+      <property name="hibernate.classloading.use_current_tccl_as_parent" value="false"/>
     </properties>
   </persistence-unit>
 </persistence>

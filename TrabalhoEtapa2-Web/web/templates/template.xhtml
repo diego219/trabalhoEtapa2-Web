@@ -13,8 +13,8 @@
         </h:head>
         <p:layout fullPage="true">
             <p:layoutUnit position="north" header="Sistema com JSF 2.2 e Primefaces"
-                style="text-align: center">
-                              
+                          style="text-align: center">
+
             </p:layoutUnit>
             <p:layoutUnit position="west" header="Menu"
                           resizable="true"
@@ -24,22 +24,31 @@
                     <p:menu>
                         <p:submenu label="Cadastros">
                             <p:menuitem action="#{controleCidade.listar()}"
-                                        value="Manutenção de cidades"
+                                        value="Manutenção de Cidades"
                                         ajax="false"/>
                             <p:menuitem action="#{controleClienteComum.listar()}"
-                                        value="Manutenção de Cliente Comum"
-                                        ajax="false"/>                            
+                                        value="Manutenção de Cliente"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleClienteEmpresa.listar()}"
+                                        value="Manutenção de Empresa"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleProdutoServico.listar()}"
+                                        value="Manutenção de Produtos / Serviços"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleOrdemServico.listar()}"
+                                        value="Gerar Ordem de Serviço"
+                                        ajax="false"/>
                         </p:submenu>
                     </p:menu>
                 </h:form>
             </p:layoutUnit>
             <p:layoutUnit position="center">
                 <ui:insert name="conteudo">
-                    
+
                 </ui:insert>
             </p:layoutUnit>
             <ui:insert name="dialogos">
-                
+
             </ui:insert>
             <p:layoutUnit position="south">
                 <ui:include src="/templates/ajaxstatus.xhtml"/>

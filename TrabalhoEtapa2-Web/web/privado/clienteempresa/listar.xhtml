@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">
+            Manutenção de Empresa
+        </ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem" prependId="false">
+                <p:growl/>
+                <p:commandButton value="Novo Cliente"
+                                 actionListener="#{controleClienteEmpresa.novo()}"
+                                 update=":formEdicao"
+                                 process="@form"
+                                 oncomplete="PF('dlg').show();"/>
+                <p:dataTable value="#{controleClienteEmpresa.dao.listarTodos}"
+                             var="obj">
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:outputLabel value="Total de registros: #{controleClienteEmpresa.dao.listarTodos.size()}"/>
+                        </div>
+                    </f:facet>
+                    <p:column headerText="ID">
+                        <p:outputLabel value="#{obj.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <p:outputLabel value="#{obj.nome}"/>
+                    </p:column>    
+                    <p:column headerText="Ações">
+                        <div align="center">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{controleClienteEmpresa.editar(obj.id)}"
+                                             oncomplete="PF('dlg').show();"
+                                             update=":formEdicao"
+                                             process="@form"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             action="#{controleClienteEmpresa.excluir(obj.id)}"
+                                             update="@form" process="@form"
+                                             onclick="if (!confirm('Confirma a exclusão do objeto?'))
+                                                         return false"/>                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog header="Edição" widgetVar="dlg"
+                      resizable="false" modal="true" width="550" height="480">
+                <h:form id="formEdicao" prependId="false">
+                    <p:growl id="growl"/>
+                    <p:tabView id="tab">
+                        <p:tab title="Dados Principais">
+                            <div align="center">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="footer">
+                                        <div align="center">
+                                            <p:commandButton actionListener="#{controleClienteEmpresa.salvar()}"
+                                                             update=":formListagem :formEdicao"
+                                                             value="Salvar"
+                                                             icon="ui-icon-disk"
+                                                             oncomplete="if (!args.validationFailed) {PF('dlg').hide();}"/>
+                                        </div>                            
+                                    </f:facet>
+                                    <p:outputLabel value="ID"/>
+                                    <p:inputText value="#{controleClienteEmpresa.objeto.id}" readonly="true" size="5"/>
+                                    <p:outputLabel value="Nome" for="txtNome"/>
+                                    <p:inputText value="#{controleClienteEmpresa.objeto.nome}" id="txtNome" 
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="Endereço" for="txtEndereço"/>
+                                    <p:inputText id="txtEndereço" value="#{controleClienteEmpresa.objeto.endereco}"
+                                                 size="50" maxlength="50"/>      
+                                    <p:outputLabel value="CEP" for="txtCep"/>
+                                    <p:inputMask id="txtCep" size="10"
+                                                 mask="99999-999" 
+                                                 value="#{controleClienteEmpresa.objeto.cep}"/>
+                                    <p:outputLabel value="CPF" for="txtCPF"/>
+                                    <p:inputMask id="txtCPF" size="14"
+                                                 mask="999.999.999-99" 
+                                                 value="#{controleClienteEmpresa.objeto.cpf}"/>
+                                    <p:outputLabel value="Telefone" for="txtTelefone"/>
+                                    <p:inputMask id="txtTelefone" size="14"
+                                                 mask="(99)9999-9999" 
+                                                 value="#{controleClienteEmpresa.objeto.telefone}"/>
+                                    <p:outputLabel value="Nascimento" for="txtNascimento"/>
+                                    <p:calendar value="#{controleClienteEmpresa.objeto.nascimento}"
+                                                id="txtNascimento"
+                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
+                                    <p:outputLabel value="Cidade" for="selectCidade"/>
+                                    <p:selectOneMenu value="#{controleClienteEmpresa.objeto.cidade}"
+                                                     id="selectCidade">
+                                        <f:converter converterId="converterCidade"/>
+                                        <f:selectItems value="#{controleClienteEmpresa.daoCidade.listarTodos}" 
+                                                       var="c"
+                                                       itemLabel="#{c.nome}"/>
+                                    </p:selectOneMenu>
+                                    
+                                    <p:outputLabel value="Ativo" for="txtAtivo"/>
+                                    <p:inputText id="txtAtivo" value="#{controleClienteEmpresa.objeto.ativo}"
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="SPC" for="txtSpc"/>
+                                    <p:inputText id="txtSpc" value="#{controleClienteEmpresa.objeto.spc}"
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="Data Cadastro" for="txtDataCadastro"/>
+                                    <p:calendar value="#{controleClienteEmpresa.objeto.data_cadastro}"
+                                                id="txtDataCadastro"
+                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
+                                </p:panelGrid>                                
+                            </div>
+                        </p:tab>
+                    </p:tabView>
+                </h:form>         
+            </p:dialog>
+            
+        </ui:define>
+    </ui:composition>
+</html>
