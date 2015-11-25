@@ -12,7 +12,7 @@
         <ui:define name="conteudo">
             <h:form id="formListagem" prependId="false">
                 <p:growl/>
-                <p:commandButton value="Novo Cliente"
+                <p:commandButton value="Nova Empresa"
                                  actionListener="#{controleClienteEmpresa.novo()}"
                                  update=":formEdicao"
                                  process="@form"
@@ -67,30 +67,27 @@
                                     </f:facet>
                                     <p:outputLabel value="ID"/>
                                     <p:inputText value="#{controleClienteEmpresa.objeto.id}" readonly="true" size="5"/>
-                                    <p:outputLabel value="Nome" for="txtNome"/>
+                                    <p:outputLabel value="Nome Fantasia" for="txtNome"/>
                                     <p:inputText value="#{controleClienteEmpresa.objeto.nome}" id="txtNome" 
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="Razão Social" for="txtRazaoSocial"/>
+                                    <p:inputText value="#{controleClienteEmpresa.objeto.razao_social}" id="txtRazaoSocial" 
                                                  size="50" maxlength="50"/>
                                     <p:outputLabel value="Endereço" for="txtEndereço"/>
                                     <p:inputText id="txtEndereço" value="#{controleClienteEmpresa.objeto.endereco}"
-                                                 size="50" maxlength="50"/>      
+                                                 size="50" maxlength="150"/>      
                                     <p:outputLabel value="CEP" for="txtCep"/>
                                     <p:inputMask id="txtCep" size="10"
                                                  mask="99999-999" 
                                                  value="#{controleClienteEmpresa.objeto.cep}"/>
-                                    <p:outputLabel value="CPF" for="txtCPF"/>
-                                    <p:inputMask id="txtCPF" size="14"
-                                                 mask="999.999.999-99" 
-                                                 value="#{controleClienteEmpresa.objeto.cpf}"/>
-                                    <p:outputLabel value="Telefone" for="txtTelefone"/>
+                                    <p:outputLabel value="CNPJ" for="txtCNPJ"/>
+                                    <p:inputMask id="txtCNPJ" size="18"
+                                                 mask="99.999.999/9999-99" 
+                                                 value="#{controleClienteEmpresa.objeto.cnpj}"/>
+                                    <p:outputLabel value="Telefone Comercial" for="txtTelefone"/>
                                     <p:inputMask id="txtTelefone" size="14"
                                                  mask="(99)9999-9999" 
                                                  value="#{controleClienteEmpresa.objeto.telefone}"/>
-                                    <p:outputLabel value="Nascimento" for="txtNascimento"/>
-                                    <p:calendar value="#{controleClienteEmpresa.objeto.nascimento}"
-                                                id="txtNascimento"
-                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
-                                        <f:converter converterId="converterCalendar"/>
-                                    </p:calendar>
                                     <p:outputLabel value="Cidade" for="selectCidade"/>
                                     <p:selectOneMenu value="#{controleClienteEmpresa.objeto.cidade}"
                                                      id="selectCidade">
@@ -99,17 +96,30 @@
                                                        var="c"
                                                        itemLabel="#{c.nome}"/>
                                     </p:selectOneMenu>
-                                    
+                                    <p:outputLabel value="Nome Contato" for="txtNomeContato"/>
+                                    <p:inputText value="#{controleClienteEmpresa.objeto.nome_contato}" id="txtNomeContato" 
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="Celular Contato" for="txtCelular"/>
+                                    <p:inputMask id="txtCelular" size="14"
+                                                 mask="(99)9999-9999" 
+                                                 value="#{controleClienteEmpresa.objeto.celular_contato}"/>
                                     <p:outputLabel value="Ativo" for="txtAtivo"/>
-                                    <p:inputText id="txtAtivo" value="#{controleClienteEmpresa.objeto.ativo}"
-                                                 size="50" maxlength="50"/>
-                                    <p:outputLabel value="SPC" for="txtSpc"/>
-                                    <p:inputText id="txtSpc" value="#{controleClienteEmpresa.objeto.spc}"
-                                                 size="50" maxlength="50"/>
+                                    <p:selectOneRadio id="txtAtivo" value="#{controleClienteEmpresa.objeto.ativo}">
+                                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem itemLabel="Não" itemValue="false" />
+                                    </p:selectOneRadio>
+                                    <p:outputLabel value="Data de Fundação" for="txtDataFundacao"/>
+                                    <p:calendar value="#{controleClienteEmpresa.objeto.fundacao}"
+                                                id="txtDataFundacao"
+                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
                                     <p:outputLabel value="Data Cadastro" for="txtDataCadastro"/>
                                     <p:calendar value="#{controleClienteEmpresa.objeto.data_cadastro}"
                                                 id="txtDataCadastro"
-                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                                                readonly="true"
+                                                disabled="true"
+                                                mask="true" pattern="dd/MM/yyyy">
                                         <f:converter converterId="converterCalendar"/>
                                     </p:calendar>
                                 </p:panelGrid>                                
@@ -118,7 +128,6 @@
                     </p:tabView>
                 </h:form>         
             </p:dialog>
-            
         </ui:define>
     </ui:composition>
 </html>

@@ -5,6 +5,7 @@ import br.edu.ifsul.dao.ClienteEmpresaDAO;
 import br.edu.ifsul.modelo.ClienteEmpresa;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
+import java.util.Calendar;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -36,6 +37,9 @@ public class ControleClienteEmpresa implements Serializable {
 
     public void salvar() {
         try {
+            if (objeto.getData_cadastro() == null) {
+                objeto.setData_cadastro(Calendar.getInstance());
+            }
             if (objeto.getId()+"" == null) {
                 dao.persist(objeto);
             } else {

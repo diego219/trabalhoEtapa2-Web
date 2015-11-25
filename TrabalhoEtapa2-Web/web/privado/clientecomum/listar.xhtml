@@ -72,7 +72,7 @@
                                                  size="50" maxlength="50"/>
                                     <p:outputLabel value="Endereço" for="txtEndereço"/>
                                     <p:inputText id="txtEndereço" value="#{controleClienteComum.objeto.endereco}"
-                                                 size="50" maxlength="50"/>      
+                                                 size="50" maxlength="150"/>      
                                     <p:outputLabel value="CEP" for="txtCep"/>
                                     <p:inputMask id="txtCep" size="10"
                                                  mask="99999-999" 
@@ -99,17 +99,22 @@
                                                        var="c"
                                                        itemLabel="#{c.nome}"/>
                                     </p:selectOneMenu>
-                                    
                                     <p:outputLabel value="Ativo" for="txtAtivo"/>
-                                    <p:inputText id="txtAtivo" value="#{controleClienteComum.objeto.ativo}"
-                                                 size="50" maxlength="50"/>
+                                    <p:selectOneRadio id="txtAtivo" value="#{controleClienteComum.objeto.ativo}">
+                                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem itemLabel="Não" itemValue="false" />
+                                    </p:selectOneRadio>
                                     <p:outputLabel value="SPC" for="txtSpc"/>
-                                    <p:inputText id="txtSpc" value="#{controleClienteComum.objeto.spc}"
-                                                 size="50" maxlength="50"/>
+                                    <p:selectOneRadio id="txtSpc" value="#{controleClienteComum.objeto.spc}">
+                                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                                        <f:selectItem itemLabel="Não" itemValue="false" />
+                                    </p:selectOneRadio>
                                     <p:outputLabel value="Data Cadastro" for="txtDataCadastro"/>
                                     <p:calendar value="#{controleClienteComum.objeto.data_cadastro}"
                                                 id="txtDataCadastro"
-                                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                                                readonly="true"
+                                                disabled="true"
+                                                mask="true" pattern="dd/MM/yyyy">
                                         <f:converter converterId="converterCalendar"/>
                                     </p:calendar>
                                 </p:panelGrid>                                
@@ -138,16 +143,17 @@
                                     <div align="center">
                                         <p:commandButton id="btnAlterarReferencia"
                                                          icon="ui-icon-pencil"
-                                         actionListener="#{controleClienteComum.alterarReferencia(idx)}"
-                                         process="btnAlterarReferencia"
-                                         update=":formReferencia"
-                                         oncomplete="PF('dlgReferencia').show();"/>
+                                                         actionListener="#{controleClienteComum.alterarReferencia(idx)}"
+                                                         process="btnAlterarReferencia"
+                                                         update=":formReferencia"
+                                                         oncomplete="PF('dlgReferencia').show();"/>
                                         <p:commandButton id="btnExcluirReferencia"   
                                                          icon="ui-icon-trash"
-                                        actionListener="#{controleClienteComum.removerReferencia(idx)}"
-                                        process="btnExcluirReferencia"
-                                        update="listaReferencias growl"
-                                        onclick="if (!confirm('Confirme a exclusão?')) return false"/>                                        
+                                                         actionListener="#{controleClienteComum.removerReferencia(idx)}"
+                                                         process="btnExcluirReferencia"
+                                                         update="listaReferencias growl"
+                                                         onclick="if (!confirm('Confirme a exclusão?'))
+                                                                     return false"/>                                        
                                     </div>
                                 </p:column>                                    
                             </p:dataTable>                                         
@@ -166,9 +172,9 @@
                                 <p:commandButton id="btnAdicionarReferencia"
                                                  value="Salvar" icon="ui-icon-disk"
                                                  actionListener="#{controleClienteComum.salvarReferencia()}"
-                                update=":formEdicao:tab:listaReferencias formReferencia :formEdicao:growl"
-                                process="btnAdicionarReferencia txtReferenciaTelefone txtReferenciaNome"
-                                oncomplete="if(!args.validationFailed){PF('dlgReferencia').hide();}"/>                                
+                                                 update=":formEdicao:tab:listaReferencias formReferencia :formEdicao:growl"
+                                                 process="btnAdicionarReferencia txtReferenciaTelefone txtReferenciaNome"
+                                                 oncomplete="if(!args.validationFailed){PF('dlgReferencia').hide();}"/>                                
                             </div>
                         </f:facet>
                         <p:outputLabel value="Referencia" for="txtReferenciaTelefone"/>
@@ -181,7 +187,7 @@
                     </p:panelGrid>
                 </h:form>       
             </p:dialog>
-            
+
         </ui:define>
     </ui:composition>
 </html>
