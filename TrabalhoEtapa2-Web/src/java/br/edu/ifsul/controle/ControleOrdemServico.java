@@ -1,9 +1,10 @@
 package br.edu.ifsul.controle;
 
-import br.edu.ifsul.dao.CidadeDAO;
 import br.edu.ifsul.dao.ClienteComumDAO;
-import br.edu.ifsul.modelo.ClienteComum;
-import br.edu.ifsul.modelo.Referencia;
+import br.edu.ifsul.dao.ClienteEmpresaDAO;
+import br.edu.ifsul.dao.OrdemServicoDAO;
+import br.edu.ifsul.modelo.OrdemServico;
+import br.edu.ifsul.modelo.ItemOrdemServico;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -14,27 +15,28 @@ import javax.faces.bean.ViewScoped;
  *
  * @author diego
  */
-@ManagedBean(name = "controleClienteComum")
+@ManagedBean(name = "controleOrdemServico")
 @ViewScoped
 public class ControleOrdemServico implements Serializable {
 
     @EJB
-    private ClienteComumDAO dao;
-    private ClienteComum objeto;
+    private OrdemServicoDAO dao;
+    private OrdemServico objeto;
     @EJB
-    private CidadeDAO daoCidade;
-    private Referencia referencia;
-    private Boolean novaReferencia;
+    private ClienteComumDAO daoClienteComum;
+    private ClienteEmpresaDAO daoClienteEmpresa;
+    private ItemOrdemServico itemOrdemServico;
+    private Boolean novoItem;
 
     public ControleOrdemServico() {
     }
        
     public String listar() {
-        return "/privado/clientecomum/listar?faces-redirect=true";
+        return "/privado/ordemservico/listar?faces-redirect=true";
     }
 
     public void novo() {
-        objeto = new ClienteComum();        
+        objeto = new OrdemServico();        
     }
 
     public void salvar() {
@@ -68,66 +70,74 @@ public class ControleOrdemServico implements Serializable {
         }
     }
 
-    public void novaReferencia(){
-        referencia = new Referencia();
-        novaReferencia = true;
+    public void novoItemOrdemServico(){
+        itemOrdemServico = new ItemOrdemServico();
+        novoItem = true;
     }
     
-    public void alterarReferencia(int index){
-        referencia = objeto.getReferencias().get(index);
-        novaReferencia = false;
+    public void alterarItemOrdemServico(int index){
+        itemOrdemServico = objeto.getItens_ordem_servico().get(index);
+        novoItem = false;
     }
     
-    public void salvarReferencia(){
-        if (novaReferencia){
-            objeto.adicionarReferencia(referencia);
+    public void salvarItemOrdemServico(){
+        if (novoItem){
+            objeto.adicionarItemOrdemServico(itemOrdemServico);
         } 
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
     
-    public void removerReferencia(int index){
-        objeto.removerReferencia(index);
+    public void removerItemOrdemServico(int index){
+        objeto.removerItemOrdemServico(index);
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
     
     
-    public ClienteComumDAO getDao() {
+    public OrdemServicoDAO getDao() {
         return dao;
     }
 
-    public void setDao(ClienteComumDAO dao) {
+    public void setDao(OrdemServicoDAO dao) {
         this.dao = dao;
     }
 
-    public ClienteComum getObjeto() {
+    public OrdemServico getObjeto() {
         return objeto;
     }
 
-    public void setObjeto(ClienteComum objeto) {
+    public void setObjeto(OrdemServico objeto) {
         this.objeto = objeto;
     }
 
-    public CidadeDAO getDaoCidade() {
-        return daoCidade;
+    public ClienteComumDAO getDaoClienteComum() {
+        return daoClienteComum;
     }
 
-    public void setDaoCidade(CidadeDAO daoCidade) {
-        this.daoCidade = daoCidade;
+    public void setDaoClienteComum(ClienteComumDAO daoClienteComum) {
+        this.daoClienteComum = daoClienteComum;
+    }
+    
+    public ClienteEmpresaDAO getDaoClienteEmpresa() {
+        return daoClienteEmpresa;
     }
 
-    public Referencia getReferencia() {
-        return referencia;
+    public void setDaoClienteEmpresa(ClienteEmpresaDAO daoClienteEmpresa) {
+        this.daoClienteEmpresa = daoClienteEmpresa;
     }
 
-    public void setReferencia(Referencia telefone) {
-        this.referencia = telefone;
+    public ItemOrdemServico getItemOrdemServico() {
+        return itemOrdemServico;
     }
 
-    public Boolean getNovaReferencia() {
-        return novaReferencia;
+    public void setItemOrdemServico(ItemOrdemServico itemOrdemServico) {
+        this.itemOrdemServico = itemOrdemServico;
     }
 
-    public void setNovaReferencia(Boolean novaReferencia) {
-        this.novaReferencia = novaReferencia;
+    public Boolean getNovoItem() {
+        return novoItem;
+    }
+
+    public void setNovoItem(Boolean novoItem) {
+        this.novoItem = novoItem;
     }
 }

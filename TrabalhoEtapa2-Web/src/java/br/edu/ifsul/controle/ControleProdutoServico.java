@@ -1,11 +1,10 @@
 package br.edu.ifsul.controle;
 
-import br.edu.ifsul.dao.CidadeDAO;
-import br.edu.ifsul.dao.ClienteComumDAO;
-import br.edu.ifsul.modelo.ClienteComum;
-import br.edu.ifsul.modelo.Referencia;
+import br.edu.ifsul.dao.ProdutoServicoDAO;
+import br.edu.ifsul.modelo.ProdutoServico;
 import br.edu.ifsul.util.Util;
 import java.io.Serializable;
+import java.util.Calendar;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -14,31 +13,30 @@ import javax.faces.bean.ViewScoped;
  *
  * @author diego
  */
-@ManagedBean(name = "controleClienteComum")
+@ManagedBean(name = "controleProdutoServico")
 @ViewScoped
 public class ControleProdutoServico implements Serializable {
 
     @EJB
-    private ClienteComumDAO dao;
-    private ClienteComum objeto;
-    @EJB
-    private CidadeDAO daoCidade;
-    private Referencia referencia;
-    private Boolean novaReferencia;
+    private ProdutoServicoDAO dao;
+    private ProdutoServico objeto;
 
     public ControleProdutoServico() {
     }
        
     public String listar() {
-        return "/privado/clientecomum/listar?faces-redirect=true";
+        return "/privado/produtoservico/listar?faces-redirect=true";
     }
 
     public void novo() {
-        objeto = new ClienteComum();        
+        objeto = new ProdutoServico();        
     }
 
     public void salvar() {
         try {
+            if (objeto.getData_cadastro() == null) {
+                objeto.setData_cadastro(Calendar.getInstance());
+            }
             if (objeto.getId()+"" == null) {
                 dao.persist(objeto);
             } else {
@@ -67,67 +65,20 @@ public class ControleProdutoServico implements Serializable {
             Util.mensagemErro("Erro ao remover objeto:"+Util.getMensagemErro(e));
         }
     }
-
-    public void novaReferencia(){
-        referencia = new Referencia();
-        novaReferencia = true;
-    }
     
-    public void alterarReferencia(int index){
-        referencia = objeto.getReferencias().get(index);
-        novaReferencia = false;
-    }
-    
-    public void salvarReferencia(){
-        if (novaReferencia){
-            objeto.adicionarReferencia(referencia);
-        } 
-        Util.mensagemInformacao("Operação realizada com sucesso");
-    }
-    
-    public void removerReferencia(int index){
-        objeto.removerReferencia(index);
-        Util.mensagemInformacao("Operação realizada com sucesso");
-    }
-    
-    
-    public ClienteComumDAO getDao() {
+    public ProdutoServicoDAO getDao() {
         return dao;
     }
 
-    public void setDao(ClienteComumDAO dao) {
+    public void setDao(ProdutoServicoDAO dao) {
         this.dao = dao;
     }
 
-    public ClienteComum getObjeto() {
+    public ProdutoServico getObjeto() {
         return objeto;
     }
 
-    public void setObjeto(ClienteComum objeto) {
+    public void setObjeto(ProdutoServico objeto) {
         this.objeto = objeto;
-    }
-
-    public CidadeDAO getDaoCidade() {
-        return daoCidade;
-    }
-
-    public void setDaoCidade(CidadeDAO daoCidade) {
-        this.daoCidade = daoCidade;
-    }
-
-    public Referencia getReferencia() {
-        return referencia;
-    }
-
-    public void setReferencia(Referencia telefone) {
-        this.referencia = telefone;
-    }
-
-    public Boolean getNovaReferencia() {
-        return novaReferencia;
-    }
-
-    public void setNovaReferencia(Boolean novaReferencia) {
-        this.novaReferencia = novaReferencia;
     }
 }

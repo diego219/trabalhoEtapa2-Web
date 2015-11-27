@@ -1,7 +1,7 @@
 
 package br.edu.ifsul.dao;
 
-import br.edu.ifsul.modelo.ClienteEmpresa;
+import br.edu.ifsul.modelo.OrdemServico;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -16,26 +16,26 @@ public class OrdemServicoDAO implements Serializable {
     
     @PersistenceContext(unitName = "TrabalhoEtapa2-WebPU")
     private EntityManager em;
-    private List<ClienteEmpresa> listarTodos;
+    private List<OrdemServico> listarTodos;
 
     public OrdemServicoDAO() {
     }
     
-    public void persist(ClienteEmpresa objeto) throws Exception {
+    public void persist(OrdemServico objeto) throws Exception {
         em.persist(objeto);        
     }
     
-    public void merge(ClienteEmpresa objeto) throws Exception {
+    public void merge(OrdemServico objeto) throws Exception {
         em.merge(objeto);
     }
     
-    public void remove(ClienteEmpresa objeto) throws Exception{
+    public void remove(OrdemServico objeto) throws Exception{
         objeto = em.merge(objeto);
         em.remove(objeto);
     }
     
-    public ClienteEmpresa getObjectById(Integer id) throws Exception {
-        ClienteEmpresa obj = em.find(ClienteEmpresa.class, id);
+    public OrdemServico getObjectById(Integer id) throws Exception {
+        OrdemServico obj = em.find(OrdemServico.class, id);
         return obj;
     }
 
@@ -47,11 +47,11 @@ public class OrdemServicoDAO implements Serializable {
         this.em = em;
     }
 
-    public List<ClienteEmpresa> getListarTodos() {
-        return em.createQuery("from ClienteEmpresa order by nome").getResultList();
+    public List<OrdemServico> getListarTodos() {
+        return em.createQuery("from OrdemServico order by id").getResultList();
     }
 
-    public void setListarTodos(List<ClienteEmpresa> listarTodos) {
+    public void setListarTodos(List<OrdemServico> listarTodos) {
         this.listarTodos = listarTodos;
     }
 

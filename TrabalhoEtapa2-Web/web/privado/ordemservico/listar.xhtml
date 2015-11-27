@@ -2,54 +2,144 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/templates/template.xhtml">
         <ui:define name="titulo">
-            Listagem de cidades
+            Gerar Ordem de Serviço
         </ui:define>
         <ui:define name="conteudo">
-            <h:form>
+            <h:form id="formListagem" prependId="false">
                 <p:growl/>
-                <p:dataTable value="#{controleCidade.dao.listarTodos}" var="obj"
-                             emptyMessage="Nenhum registro encontrado">
-                    <f:facet name="header">
-                        <p:commandButton value="Novo"
-                                         action="#{controleCidade.novo()}"
-                                         ajax="false"/>
-                        <p:outputLabel value="Listagem de cidades"/>
-                    </f:facet>
-
+                <p:commandButton value="Nova Ordem de Serviço"
+                                 actionListener="#{controleOrdemServico.novo()}"
+                                 update=":formEdicao"
+                                 process="@form"
+                                 oncomplete="PF('dlg').show();"/>
+                <p:dataTable value="#{controleOrdemServico.dao.listarTodos}"
+                             var="obj">
                     <f:facet name="footer">
-                        <p:outputLabel value="Total de registros: #{controleCidade.dao.listarTodos.size()}"/>
+                        <div align="center">
+                            <p:outputLabel value="Total de registros: #{controleOrdemServico.dao.listarTodos.size()}"/>
+                        </div>
                     </f:facet>
-
                     <p:column headerText="ID">
                         <p:outputLabel value="#{obj.id}"/>
                     </p:column>
-                    <p:column headerText="Nome">
-                        <p:outputLabel value="#{obj.nome}"/>
-                    </p:column>    
-                    
+                    <p:column headerText="Cliente">
+                        <p:outputLabel value="#{obj.cliente}"/>
+                    </p:column>
+                    <p:column headerText="Valor Total">
+                        <p:outputLabel value="#{obj.valor_total}"/>
+                    </p:column>
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton icon="ui-icon-pencil"
-                                             action="#{controleCidade.editar(obj.id)}"
-                                             ajax="false"/>
+                                             action="#{controleOrdemServico.editar(obj.id)}"
+                                             oncomplete="PF('dlg').show();"
+                                             update=":formEdicao"
+                                             process="@form"/>
                             <p:commandButton icon="ui-icon-trash"
-                                             action="#{controleCidade.excluir(obj.id)}"
+                                             action="#{controleOrdemServico.excluir(obj.id)}"
                                              update="@form" process="@form"
                                              onclick="if (!confirm('Confirma a exclusão do objeto?'))
-                                                     return false"/>
+                                                         return false"/>                            
                         </div>
                     </p:column>
                 </p:dataTable>
             </h:form>
-
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog header="Edição" widgetVar="dlg"
+                      resizable="false" modal="true" width="550" height="480">
+                <h:form id="formEdicao" prependId="false">
+                    <p:growl id="growl"/>
+                    <p:tabView id="tab">
+                        <p:tab title="Dados Principais">
+                            <div align="center">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="footer">
+                                        <div align="center">
+                                            <p:commandButton actionListener="#{controleOrdemServico.salvar()}"
+                                                             update=":formListagem :formEdicao"
+                                                             value="Salvar"
+                                                             icon="ui-icon-disk"
+                                                             oncomplete="if (!args.validationFailed) {PF('dlg').hide();}"/>
+                                        </div>                            
+                                    </f:facet>
+                                    <p:outputLabel value="ID"/>
+                                    <p:inputText value="#{controleOrdemServico.objeto.id}" readonly="true" size="5"/>
+                                    <p:outputLabel value="Cliente" for="selectCliente"/>
+                                    <p:selectOneMenu value="#{controleOrdemServico.objeto.cliente}"
+                                                     id="selectCliente">
+                                        <f:converter converterId="converterCliente"/>
+                                        <f:selectItems value="#{controleOrdemServico.daoClienteComum.listarTodos}" 
+                                                       var="c"
+                                                       itemLabel="#{c.nome}"/>
+                                    </p:selectOneMenu>
+                                </p:panelGrid>                                
+                            </div>
+                        </p:tab>
+                        <p:tab title="Itens Ordem de Serviço">
+                            <p:dataTable value="#{controleOrdemServico.objeto.itens_ordem_servico}"
+                                         var="item" rowIndexVar="idx"
+                                         id="listaItens">
+                                <f:facet name="header">
+                                    <p:commandButton value="Novo Item Ordem de Serviço"
+                                                     actionListener="#{controleOrdemServico.novoItemOrdemServico()}"
+                                                     update=":formItemOrdemServico"
+                                                     icon="ui-icon-plus"
+                                                     id="btnNovoItemOrdemServico"
+                                                     process="btnNovoItemOrdemServico"
+                                                     oncomplete="PF('dlgReferencia').show();"/>                                                     
+                                </f:facet>    
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{item.id}"/>
+                                </p:column>
+                                <p:column headerText="Ações">
+                                    <div align="center">
+                                        <p:commandButton id="btnAlterarItemOrdemServico"
+                                                         icon="ui-icon-pencil"
+                                                         actionListener="#{controleOrdemServico.alterarItemOrdemServico(idx)}"
+                                                         process="btnAlterarItemOrdemServico"
+                                                         update=":formItemOrdemServico"
+                                                         oncomplete="PF('dlgItemOrdemServico').show();"/>
+                                        <p:commandButton id="btnExcluirItemOrdemServico"   
+                                                         icon="ui-icon-trash"
+                                                         actionListener="#{controleOrdemServico.removerItemOrdemServico(idx)}"
+                                                         process="btnExcluirItemOrdemServico"
+                                                         update="listaItens growl"
+                                                         onclick="if (!confirm('Confirme a exclusão?'))
+                                                                     return false"/>                                        
+                                    </div>
+                                </p:column>                                    
+                            </p:dataTable>                                         
+                        </p:tab>
+                    </p:tabView>
+                </h:form>         
+            </p:dialog>
+            <p:dialog header="Edição de Itens"
+                      widgetVar="dlgItemOrdemServico" resizable="false"
+                      modal="true">
+                <h:form id="formItemOrdemServico" >
+                    <p:growl/>
+                    <p:panelGrid columns="2">
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:commandButton id="btnAdicionarItemOrdemServico"
+                                                 value="Salvar" icon="ui-icon-disk"
+                                                 actionListener="#{controleOrdemServico.salvarItemOrdemServico()}"
+                                                 update=":formEdicao:tab:listaItens formItemOrdemServico :formEdicao:growl"
+                                                 process="btnAdicionarItemOrdemServico txtItemQuantidade"
+                                                 oncomplete="if(!args.validationFailed){PF('dlgItemOrdemServico').hide();}"/>                                
+                            </div>
+                        </f:facet>
+                        <p:outputLabel value="Quantidade" for="txtItemQuantidade"/>
+                        <p:inputText id="txtItemQuantidade" value="#{controleOrdemServico.itemOrdemServico.quantidade}"/>
+                    </p:panelGrid>
+                </h:form>       
+            </p:dialog>
         </ui:define>
     </ui:composition>
-
-
 </html>
-
