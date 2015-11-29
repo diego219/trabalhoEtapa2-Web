@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.primefaces.component.datatable.DataTable;
 
 /**
  *
@@ -52,6 +53,10 @@ public class ClienteComumDAO implements Serializable {
 
     public List<ClienteComum> getListarTodos() {
         return em.createQuery("from ClienteComum order by nome").getResultList();
+    }
+    
+    public List<DataTable> getListarTodosClientes() {
+        return em.createQuery("from Cliente order by nome").getResultList();
     }
 
     public void setListarTodos(List<ClienteComum> listarTodos) {

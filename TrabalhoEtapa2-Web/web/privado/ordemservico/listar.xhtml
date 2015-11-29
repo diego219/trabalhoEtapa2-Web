@@ -71,14 +71,39 @@
                                     <p:outputLabel value="ID"/>
                                     <p:inputText value="#{controleOrdemServico.objeto.id}" readonly="true" size="5"/>
                                     <p:outputLabel value="Cliente" for="selectCliente"/>
-                                    <p:selectOneMenu value="#{controleOrdemServico.objeto.cliente}"
-                                                     id="selectCliente">
+                                    <p:selectOneMenu value="#{controleOrdemServico.objeto.cliente}" id="selectCliente">
                                         <f:converter converterId="converterCliente"/>
-                                        <f:selectItems value="#{controleOrdemServico.daoClienteComum.listarTodos}" 
+                                        <f:selectItems value="#{controleOrdemServico.daoClienteComum.listarTodosClientes}" 
                                                        var="c"
                                                        itemLabel="#{c.nome}"/>
                                     </p:selectOneMenu>
-                                </p:panelGrid>                                
+                                    <p:outputLabel value="Data Emissao" for="txtDataEmissao"/>
+                                    <p:calendar value="#{controleOrdemServico.objeto.data_emissao}"
+                                                id="txtDataEmissao"
+                                                mask="true" pattern="dd/MM/yyyy">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
+                                    <p:outputLabel value="Data Previsão de Entrega" for="txtDataPrevista"/>
+                                    <p:calendar value="#{controleOrdemServico.objeto.data_prevista}"
+                                                id="txtDataPrevista"
+                                                mask="true" pattern="dd/MM/yyyy">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
+                                    <p:outputLabel value="Data Entrega" for="txtDataEntrega"/>
+                                    <p:calendar value="#{controleOrdemServico.objeto.data_entrega}"
+                                                id="txtDataEntrega"
+                                                mask="true" pattern="dd/MM/yyyy">
+                                        <f:converter converterId="converterCalendar"/>
+                                    </p:calendar>
+                                    <p:outputLabel value="Valor Total" for="txtValorTotal"/>
+                                    <p:inputText value="#{controleOrdemServico.objeto.valor_total}" id="txtValorTotal" 
+                                                 size="50" maxlength="9">
+                                        <f:convertNumber maxIntegerDigits="7" maxFractionDigits="2" pattern="#0.00"/>
+                                    </p:inputText>
+                                    <p:outputLabel value="Observações" for="txtObservacoes"/>
+                                    <p:inputTextarea value="#{controleOrdemServico.objeto.observacoes}" id="txtObservacoes" 
+                                                     rows="10" maxlength="50"/>
+                                </p:panelGrid>
                             </div>
                         </p:tab>
                         <p:tab title="Itens Ordem de Serviço">
@@ -92,10 +117,19 @@
                                                      icon="ui-icon-plus"
                                                      id="btnNovoItemOrdemServico"
                                                      process="btnNovoItemOrdemServico"
-                                                     oncomplete="PF('dlgReferencia').show();"/>                                                     
-                                </f:facet>    
+                                                     oncomplete="PF('dlgItemOrdemServico').show();"/>                                                     
+                                </f:facet>
                                 <p:column headerText="ID">
                                     <p:outputLabel value="#{item.id}"/>
+                                </p:column>
+                                <p:column headerText="Produto">
+                                    <p:outputLabel value="#{item.produto_servico}"/>
+                                </p:column>
+                                <p:column headerText="Quantidade">
+                                    <p:outputLabel value="#{item.quantidade}"/>
+                                </p:column>
+                                <p:column headerText="Unitário">
+                                    <p:outputLabel value="#{item.unitario}"/>
                                 </p:column>
                                 <p:column headerText="Ações">
                                     <div align="center">
@@ -131,12 +165,26 @@
                                                  value="Salvar" icon="ui-icon-disk"
                                                  actionListener="#{controleOrdemServico.salvarItemOrdemServico()}"
                                                  update=":formEdicao:tab:listaItens formItemOrdemServico :formEdicao:growl"
-                                                 process="btnAdicionarItemOrdemServico txtItemQuantidade"
+                                                 process="btnAdicionarItemOrdemServico txtItemQuantidade selectProdutoServico txtDesconto txtAcrescimo txtUnitario"
                                                  oncomplete="if(!args.validationFailed){PF('dlgItemOrdemServico').hide();}"/>                                
                             </div>
                         </f:facet>
+                        <p:outputLabel value="Produto" for="selectProdutoServico"/>
+                        <p:selectOneMenu value="#{controleOrdemServico.itemOrdemServico.produto_servico}" 
+                                         id="selectProdutoServico">
+                            <f:converter converterId="converterProdutoServico"/>
+                            <f:selectItems value="#{controleOrdemServico.daoProdutoServico.listarTodos}" 
+                                           var="p"
+                                           itemLabel="#{p.descricao}"/>
+                        </p:selectOneMenu>
                         <p:outputLabel value="Quantidade" for="txtItemQuantidade"/>
                         <p:inputText id="txtItemQuantidade" value="#{controleOrdemServico.itemOrdemServico.quantidade}"/>
+                        <p:outputLabel value="Desconto" for="txtDesconto"/>
+                        <p:inputText id="txtDesconto" value="#{controleOrdemServico.itemOrdemServico.desconto}"/>
+                        <p:outputLabel value="Acrescimo" for="txtAcrescimo"/>
+                        <p:inputText id="txtAcrescimo" value="#{controleOrdemServico.itemOrdemServico.acrescimo}"/>
+                        <p:outputLabel value="Valor Unitário" for="txtUnitario"/>
+                        <p:inputText id="txtUnitario" value="#{controleOrdemServico.itemOrdemServico.unitario}"/>
                     </p:panelGrid>
                 </h:form>       
             </p:dialog>

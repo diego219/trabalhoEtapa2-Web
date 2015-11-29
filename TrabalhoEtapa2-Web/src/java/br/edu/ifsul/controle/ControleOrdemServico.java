@@ -3,6 +3,7 @@ package br.edu.ifsul.controle;
 import br.edu.ifsul.dao.ClienteComumDAO;
 import br.edu.ifsul.dao.ClienteEmpresaDAO;
 import br.edu.ifsul.dao.OrdemServicoDAO;
+import br.edu.ifsul.dao.ProdutoServicoDAO;
 import br.edu.ifsul.modelo.OrdemServico;
 import br.edu.ifsul.modelo.ItemOrdemServico;
 import br.edu.ifsul.util.Util;
@@ -24,7 +25,10 @@ public class ControleOrdemServico implements Serializable {
     private OrdemServico objeto;
     @EJB
     private ClienteComumDAO daoClienteComum;
+    @EJB
     private ClienteEmpresaDAO daoClienteEmpresa;
+    @EJB
+    private ProdutoServicoDAO daoProdutoServico;
     private ItemOrdemServico itemOrdemServico;
     private Boolean novoItem;
 
@@ -123,6 +127,14 @@ public class ControleOrdemServico implements Serializable {
 
     public void setDaoClienteEmpresa(ClienteEmpresaDAO daoClienteEmpresa) {
         this.daoClienteEmpresa = daoClienteEmpresa;
+    }
+    
+    public ProdutoServicoDAO getDaoProdutoServico() {
+        return daoProdutoServico;
+    }
+
+    public void setDaoProdutoServico(ProdutoServicoDAO daoProdutoServico) {
+        this.daoProdutoServico = daoProdutoServico;
     }
 
     public ItemOrdemServico getItemOrdemServico() {
