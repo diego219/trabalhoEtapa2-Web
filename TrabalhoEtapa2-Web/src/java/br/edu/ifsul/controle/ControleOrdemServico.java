@@ -23,13 +23,13 @@ public class ControleOrdemServico implements Serializable {
     @EJB
     private OrdemServicoDAO dao;
     private OrdemServico objeto;
-    
+
     @EJB
     private ClienteComumDAO daoClienteComum;
-    
+
     @EJB
     private ClienteEmpresaDAO daoClienteEmpresa;
-    
+
     @EJB
     private ProdutoServicoDAO daoProdutoServico;
     private ItemOrdemServico itemOrdemServico;
@@ -37,69 +37,76 @@ public class ControleOrdemServico implements Serializable {
 
     public ControleOrdemServico() {
     }
-       
+
     public String listar() {
         return "/privado/ordemservico/listar?faces-redirect=true";
     }
 
     public void novo() {
-        objeto = new OrdemServico();        
+        objeto = new OrdemServico();
     }
 
     public void salvar() {
+        Double total = 0.00;
+
         try {
+            if (objeto.getItens_ordem_servico() != null) {
+                for (ItemOrdemServico item : objeto.getItens_ordem_servico()) {
+                    total = total + (item.getQuantidade() * item.getUnitario()) + item.getAcrescimo() - item.getDesconto();
+                }
+            }
+            objeto.setValor_total(total);
             if (objeto.getId() == null) {
                 dao.persist(objeto);
             } else {
                 dao.merge(objeto);
             }
-            Util.mensagemInformacao("Objeto persistido com sucesso");            
+            Util.mensagemInformacao("Objeto persistido com sucesso");
         } catch (Exception e) {
-            Util.mensagemErro("Erro ao persistir objeto: " + e.getMessage());            
+            Util.mensagemErro("Erro ao persistir objeto: " + e.getMessage());
         }
     }
 
     public void editar(Integer id) {
         try {
-            objeto = dao.getObjectById(id);            
+            objeto = dao.getObjectById(id);
         } catch (Exception e) {
-            Util.mensagemErro("Erro ao recuperar objeto: "+e.getMessage());            
+            Util.mensagemErro("Erro ao recuperar objeto: " + e.getMessage());
         }
     }
-    
-    public void excluir(Integer id){
+
+    public void excluir(Integer id) {
         try {
             objeto = dao.getObjectById(id);
             dao.remove(objeto);
             Util.mensagemInformacao("Objeto removido com sucesso");
-        } catch (Exception e){
-            Util.mensagemErro("Erro ao remover objeto:"+Util.getMensagemErro(e));
+        } catch (Exception e) {
+            Util.mensagemErro("Erro ao remover objeto:" + Util.getMensagemErro(e));
         }
     }
 
-    public void novoItemOrdemServico(){
+    public void novoItemOrdemServico() {
         itemOrdemServico = new ItemOrdemServico();
         novoItem = true;
     }
-    
-    public void alterarItemOrdemServico(Integer index){
+
+    public void alterarItemOrdemServico(Integer index) {
         itemOrdemServico = objeto.getItens_ordem_servico().get(index);
         novoItem = false;
     }
-    
-    public void salvarItemOrdemServico(){
-        if (novoItem){
+
+    public void salvarItemOrdemServico() {
+        if (novoItem) {
             objeto.adicionarItemOrdemServico(itemOrdemServico);
-        } 
+        }
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
-    
-    public void removerItemOrdemServico(Integer index){
+
+    public void removerItemOrdemServico(Integer index) {
         objeto.removerItemOrdemServico(index);
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
-    
-    
+
     public OrdemServicoDAO getDao() {
         return dao;
     }
@@ -123,7 +130,7 @@ public class ControleOrdemServico implements Serializable {
     public void setDaoClienteComum(ClienteComumDAO daoClienteComum) {
         this.daoClienteComum = daoClienteComum;
     }
-    
+
     public ClienteEmpresaDAO getDaoClienteEmpresa() {
         return daoClienteEmpresa;
     }
@@ -131,7 +138,7 @@ public class ControleOrdemServico implements Serializable {
     public void setDaoClienteEmpresa(ClienteEmpresaDAO daoClienteEmpresa) {
         this.daoClienteEmpresa = daoClienteEmpresa;
     }
-    
+
     public ProdutoServicoDAO getDaoProdutoServico() {
         return daoProdutoServico;
     }

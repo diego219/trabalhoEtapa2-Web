@@ -54,5 +54,5 @@ public class ProdutoServicoDAO implements Serializable {
     public void setListarTodos(List<ProdutoServico> listarTodos) {
         this.listarTodos = listarTodos;
     }
-
+    
 }

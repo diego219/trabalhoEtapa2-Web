@@ -27,14 +27,13 @@ public class ControleCidade implements Serializable {
         return "/privado/cidade/listar?faces-redirect=true";
     }
 
-    public String novo() {
+    public void novo() {
         objeto = new Cidade();
-        return "formulario";
     }
 
     public String salvar() {
         try {
-            if (objeto.getId()+"" == null) {
+            if (objeto.getId() == null) {
                 dao.persist(objeto);
             } else {
                 dao.merge(objeto);
@@ -47,18 +46,11 @@ public class ControleCidade implements Serializable {
         }
     }
 
-    public String cancelar() {
-        objeto = null;
-        return "listar";
-    }
-
-    public String editar(Integer id) {
+    public void editar(Integer id) {
         try {
-            objeto = dao.getObjectById(id);
-            return "formulario";
+            objeto = dao.getObjectById(id);            
         } catch (Exception e) {
-            Util.mensagemErro("Erro ao recuperar objeto: "+e.getMessage());
-            return "listar";
+            Util.mensagemErro("Erro ao recuperar objeto: "+e.getMessage());            
         }
     }
     
