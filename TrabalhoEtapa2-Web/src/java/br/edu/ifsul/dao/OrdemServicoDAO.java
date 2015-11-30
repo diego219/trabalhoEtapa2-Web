@@ -30,8 +30,12 @@ public class OrdemServicoDAO implements Serializable {
     }
     
     public void remove(OrdemServico objeto) throws Exception{
-        objeto = em.merge(objeto);
-        em.remove(objeto);
+        
+        em.remove(em.getReference(OrdemServico.class, objeto.getId()));
+        //objeto = em.merge(objeto);
+        //em.remove(objeto);
+        
+        
     }
     
     public OrdemServico getObjectById(Integer id) throws Exception {

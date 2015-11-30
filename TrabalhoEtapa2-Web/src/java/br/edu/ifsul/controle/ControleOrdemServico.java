@@ -23,10 +23,13 @@ public class ControleOrdemServico implements Serializable {
     @EJB
     private OrdemServicoDAO dao;
     private OrdemServico objeto;
+    
     @EJB
     private ClienteComumDAO daoClienteComum;
+    
     @EJB
     private ClienteEmpresaDAO daoClienteEmpresa;
+    
     @EJB
     private ProdutoServicoDAO daoProdutoServico;
     private ItemOrdemServico itemOrdemServico;
@@ -45,7 +48,7 @@ public class ControleOrdemServico implements Serializable {
 
     public void salvar() {
         try {
-            if (objeto.getId()+"" == null) {
+            if (objeto.getId() == null) {
                 dao.persist(objeto);
             } else {
                 dao.merge(objeto);
@@ -79,7 +82,7 @@ public class ControleOrdemServico implements Serializable {
         novoItem = true;
     }
     
-    public void alterarItemOrdemServico(int index){
+    public void alterarItemOrdemServico(Integer index){
         itemOrdemServico = objeto.getItens_ordem_servico().get(index);
         novoItem = false;
     }
@@ -91,7 +94,7 @@ public class ControleOrdemServico implements Serializable {
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
     
-    public void removerItemOrdemServico(int index){
+    public void removerItemOrdemServico(Integer index){
         objeto.removerItemOrdemServico(index);
         Util.mensagemInformacao("Operação realizada com sucesso");
     }
